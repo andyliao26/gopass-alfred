@@ -1,0 +1,8 @@
+#!/bin/sh
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+cd -- "$(dirname -- "$0")" || exit 1
+if ! command -v python3 >/dev/null; then
+    printf '%s\n' '{"update":{"ids":{"status":{"text":"Install Python 3 to use gopass."}}}}'
+    exit 0
+fi
+exec python3 ./gopass_ui.py "$@"

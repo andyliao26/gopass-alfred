@@ -1,16 +1,32 @@
-# Gopass-Alfred
+# gopass for Alfred 6
 
-Workflow to interact with gopass from [Alfred 3](https://www.alfredapp.com/workflows/) on MacOS. 
-You will need an Alfred 3 license in order to use workflows. 
-Currently querying entries and copying username or password to clipboard is supported.
-## Screenshot
-
-![gopass alfred screenshot](./screenshot.png)
+Search, copy, and edit gopass entries with Alfred's native UI.
 
 ## Installation
 
-Download the [latest release package](https://github.com/gopasspw/gopass-alfred/releases/latest) from github or build your own via `make release` in checked out repository.
+Requires Alfred 6 with Powerpack, Python 3, and an initialized gopass store.
+Run `make release` and open the resulting `../gopass.alfredworkflow` in Alfred 6.
 
-## Development
+## Usage
 
-Contributions to this project are welcome!
+Type `gp` to browse the store or `gp search terms` to open a filtered list.
+
+| Shortcut | Action |
+| --- | --- |
+| Enter | Copy the password using gopass's timed clipboard |
+| Command + Enter | Open the selected entry's editor |
+| Shift + Enter | Copy the username |
+| Control + Enter | Open the stored HTTP(S) website |
+| Command + K | Open the actions menu |
+| Command + F | Focus search |
+
+The window opens with focus on the results. After typing into the search field,
+use Down Arrow to return to the results before pressing Shift + Enter. The
+actions menu also contains Copy Username.
+
+The edit sheet supports username, website, and a replacement password.
+Leave the password blank to retain the current one. Command + S saves, and
+Escape cancels. The editor operates on conventional gopass entries with the
+password on the first line and `username:` (or `user:` / `login:`) and
+`url:` (or `website:`) fields on subsequent lines. Other entry content is
+preserved.

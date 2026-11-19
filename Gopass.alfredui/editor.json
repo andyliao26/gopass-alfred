@@ -1,0 +1,114 @@
+{
+  "type": "view",
+  "layout": "inline",
+  "direction": "vertical",
+  "padding": 18,
+  "spacing": 9,
+  "shortcuts": [
+    {
+      "shortcut": "⌘S",
+      "action": {
+        "type": "script",
+        "src": "./gopass-ui",
+        "args": [
+          "save",
+          "{value:editUsername.text}",
+          "{value:editSite.text}"
+        ],
+        "variables": {
+          "GOPASS_UI_NEW_PASSWORD": "{value:editPassword.text}"
+        }
+      }
+    }
+  ],
+  "components": [
+    {
+      "type": "label",
+      "text": "Edit gopass entry",
+      "font": {
+        "size": "large"
+      }
+    },
+    {
+      "type": "label",
+      "id": "editPath"
+    },
+    {
+      "type": "label",
+      "text": "Username"
+    },
+    {
+      "type": "textfield",
+      "id": "editUsername",
+      "focus": true
+    },
+    {
+      "type": "label",
+      "text": "Website"
+    },
+    {
+      "type": "textfield",
+      "id": "editSite",
+      "placeholder": "https://"
+    },
+    {
+      "type": "label",
+      "text": "New password"
+    },
+    {
+      "type": "passwordfield",
+      "id": "editPassword",
+      "placeholder": "Leave empty to keep the current password"
+    },
+    {
+      "type": "label",
+      "id": "editStatus",
+      "text": ""
+    },
+    {
+      "type": "view",
+      "layout": "inline",
+      "spacing": 8,
+      "components": [
+        {
+          "type": "button",
+          "text": "Cancel",
+          "events": [
+            {
+              "triggers": "actioned",
+              "action": {
+                "type": "json",
+                "src": {
+                  "sheet": {
+                    "close": "entryEditor"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "button",
+          "text": "Save  ⌘S",
+          "events": [
+            {
+              "triggers": "actioned",
+              "action": {
+                "type": "script",
+                "src": "./gopass-ui",
+                "args": [
+                  "save",
+                  "{value:editUsername.text}",
+                  "{value:editSite.text}"
+                ],
+                "variables": {
+                  "GOPASS_UI_NEW_PASSWORD": "{value:editPassword.text}"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

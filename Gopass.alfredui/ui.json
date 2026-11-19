@@ -1,0 +1,380 @@
+{
+  "bundleid": "pw.gopass.alfred",
+  "iconpath": "../icon.png",
+  "variablesconfig": {
+    "initialQuery": {
+      "src": "args[0]",
+      "default": ""
+    },
+    "GOPASS_UI_NEW_PASSWORD": {
+      "default": "",
+      "scriptenv": true
+    }
+  },
+  "window": {
+    "title": "gopass",
+    "size": {
+      "height": 380
+    },
+    "root": {
+      "type": "view",
+      "layout": "border",
+      "padding": 12,
+      "spacing": 8,
+      "shortcuts": [
+        {
+          "shortcut": "↩",
+          "action": {
+            "type": "script",
+            "src": "./gopass-ui",
+            "args": [
+              "password",
+              "{value:entries.selected.uid}"
+            ]
+          }
+        },
+        {
+          "shortcut": "⌘↩",
+          "action": {
+            "type": "script",
+            "src": "./gopass-ui",
+            "args": [
+              "edit",
+              "{value:entries.selected.uid}"
+            ]
+          }
+        },
+        {
+          "shortcut": "⇧↩",
+          "action": {
+            "type": "script",
+            "src": "./gopass-ui",
+            "args": [
+              "username",
+              "{value:entries.selected.uid}"
+            ]
+          }
+        },
+        {
+          "shortcut": "⌃↩",
+          "action": {
+            "type": "script",
+            "src": "./gopass-ui",
+            "args": [
+              "site",
+              "{value:entries.selected.uid}"
+            ]
+          }
+        },
+        {
+          "shortcut": "⌘K",
+          "action": {
+            "type": "json",
+            "src": {
+              "popupmenu": {
+                "src": "actions",
+                "menu": [
+                  {
+                    "type": "text",
+                    "text": "Copy Password    ↩",
+                    "action": {
+                      "type": "script",
+                      "src": "./gopass-ui",
+                      "args": [
+                        "password",
+                        "{value:entries.selected.uid}"
+                      ]
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "text": "Edit Entry    ⌘↩",
+                    "action": {
+                      "type": "script",
+                      "src": "./gopass-ui",
+                      "args": [
+                        "edit",
+                        "{value:entries.selected.uid}"
+                      ]
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "text": "Copy Username    ⇧↩",
+                    "action": {
+                      "type": "script",
+                      "src": "./gopass-ui",
+                      "args": [
+                        "username",
+                        "{value:entries.selected.uid}"
+                      ]
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "text": "Open Website    ⌃↩",
+                    "action": {
+                      "type": "script",
+                      "src": "./gopass-ui",
+                      "args": [
+                        "site",
+                        "{value:entries.selected.uid}"
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "shortcut": "↓",
+          "action": [
+            {
+              "type": "json",
+              "src": {
+                "update": {
+                  "ids": {
+                    "entries": {
+                      "focus": true
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "function",
+              "src": "entries",
+              "args": "selectdown"
+            }
+          ]
+        },
+        {
+          "shortcut": "↑",
+          "action": [
+            {
+              "type": "json",
+              "src": {
+                "update": {
+                  "ids": {
+                    "entries": {
+                      "focus": true
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "function",
+              "src": "entries",
+              "args": "selectup"
+            }
+          ]
+        },
+        {
+          "shortcut": "⌘F",
+          "action": {
+            "type": "json",
+            "src": {
+              "update": {
+                "ids": {
+                  "search": {
+                    "focus": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "events": [
+        {
+          "triggers": "preload",
+          "action": {
+            "type": "script",
+            "src": "./gopass-ui",
+            "args": [
+              "list"
+            ]
+          }
+        }
+      ],
+      "components": [
+        {
+          "type": "textfield",
+          "id": "search",
+          "text": "{var:initialQuery}",
+          "placeholder": "Search entry paths…  ⌘F",
+          "constraints": {
+            "region": "top"
+          },
+          "events": [
+            {
+              "triggers": "changed",
+              "action": {
+                "type": "function",
+                "src": "entries",
+                "args": "filterdata"
+              }
+            },
+            {
+              "triggers": "actioned",
+              "action": {
+                "type": "script",
+                "src": "./gopass-ui",
+                "args": [
+                  "password",
+                  "{value:entries.selected.uid}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "dataview",
+          "id": "entries",
+          "constraints": {
+            "region": "centre"
+          },
+          "placeholder": "No matching entries",
+          "cell": {
+            "height": 44,
+            "init": {
+              "row.background": null,
+              "name.colour": "labelColor",
+              "path.colour": "secondaryLabelColor"
+            },
+            "selected": {
+              "row.background": "selectedContentBackgroundColor",
+              "name.colour": "alternateSelectedControlTextColor",
+              "path.colour": "alternateSelectedControlTextColor"
+            },
+            "root": {
+              "type": "view",
+              "id": "row",
+              "layout": "inline",
+              "direction": "vertical",
+              "padding": 5,
+              "cornerradius": 5,
+              "components": [
+                {
+                  "type": "label",
+                  "id": "name",
+                  "colour": "labelColor"
+                },
+                {
+                  "type": "label",
+                  "id": "path",
+                  "colour": "secondaryLabelColor"
+                }
+              ]
+            }
+          },
+          "data": {
+            "type": "basic",
+            "src": [],
+            "filter": {
+              "type": "basic",
+              "args": [
+                "uid",
+                "name.text",
+                "path.text"
+              ],
+              "match": "{value:search.text}"
+            }
+          },
+          "focus": true
+        },
+        {
+          "type": "view",
+          "layout": "border",
+          "constraints": {
+            "region": "bottom"
+          },
+          "spacing": 8,
+          "components": [
+            {
+              "type": "label",
+              "id": "status",
+              "text": "",
+              "constraints": {
+                "region": "centre"
+              }
+            },
+            {
+              "type": "button",
+              "text": "Actions  ⌘K",
+              "events": [
+                {
+                  "triggers": "actioned",
+                  "action": {
+                    "type": "json",
+                    "src": {
+                      "popupmenu": {
+                        "src": "actions",
+                        "menu": [
+                          {
+                            "type": "text",
+                            "text": "Copy Password    ↩",
+                            "action": {
+                              "type": "script",
+                              "src": "./gopass-ui",
+                              "args": [
+                                "password",
+                                "{value:entries.selected.uid}"
+                              ]
+                            }
+                          },
+                          {
+                            "type": "text",
+                            "text": "Edit Entry    ⌘↩",
+                            "action": {
+                              "type": "script",
+                              "src": "./gopass-ui",
+                              "args": [
+                                "edit",
+                                "{value:entries.selected.uid}"
+                              ]
+                            }
+                          },
+                          {
+                            "type": "text",
+                            "text": "Copy Username    ⇧↩",
+                            "action": {
+                              "type": "script",
+                              "src": "./gopass-ui",
+                              "args": [
+                                "username",
+                                "{value:entries.selected.uid}"
+                              ]
+                            }
+                          },
+                          {
+                            "type": "text",
+                            "text": "Open Website    ⌃↩",
+                            "action": {
+                              "type": "script",
+                              "src": "./gopass-ui",
+                              "args": [
+                                "site",
+                                "{value:entries.selected.uid}"
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              ],
+              "id": "actions",
+              "constraints": {
+                "region": "right"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
